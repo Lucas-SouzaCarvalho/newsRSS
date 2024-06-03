@@ -5,6 +5,8 @@ import 'package:webfeed/webfeed.dart';
 
 class NewsItem extends StatelessWidget {
   final RssItem item;
+  final String defaultImageAsset =
+      'lib/assets/images/default_image.png'; // Default image asset path
 
   const NewsItem({required this.item});
 
@@ -38,6 +40,8 @@ class NewsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? imageUrl = _getImageUrl(item);
+
     return Card(
       margin: EdgeInsets.all(12.0),
       child: Padding(
@@ -45,16 +49,22 @@ class NewsItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_getImageUrl(item) != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  _getImageUrl(item)!,
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.contain,
-                ),
-              ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: imageUrl != null
+                  ? Image.network(
+                      imageUrl,
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      defaultImageAsset,
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+            ),
             SizedBox(width: 10),
             Expanded(
               child: Column(

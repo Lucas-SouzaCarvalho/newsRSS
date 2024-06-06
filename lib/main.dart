@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'news_feed_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,6 +14,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

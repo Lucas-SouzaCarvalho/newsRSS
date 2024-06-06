@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
@@ -98,6 +100,14 @@ class NewsItem extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () async {
+                        String uid = FirebaseAuth.instance.currentUser!.uid;
+                        Map<String, dynamic> data = {
+                          "categories":item.categories?.map((element) => element.value).toList()
+                        };
+
+                        FirebaseFirestore.instance.collection("read_more").doc(uid).update(data);
+
+
                         await FirebaseAnalytics.instance.logEvent(
                           name: "read_more",
                             parameters: {

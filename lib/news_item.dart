@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
@@ -96,7 +97,13 @@ class NewsItem extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await FirebaseAnalytics.instance.logEvent(
+                          name: "read_more",
+                            parameters: {
+                            "category": item.categories?.first.value ?? "none"
+                          }
+                        );
                         _openNews(item.link ?? '');
                       },
                       child: Text('Read more'),

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:webfeed/webfeed.dart';
@@ -21,7 +22,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
     final response = await http.get(
         Uri.parse('https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'));
     if (response.statusCode == 200) {
-      final feed = RssFeed.parse(response.body);
+      final RssFeed feed = RssFeed.parse(response.body);
       setState(() {
         _newsItems = feed.items;
       });
@@ -43,6 +44,11 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
           : ListView.builder(
               itemCount: _newsItems!.length,
               itemBuilder: (context, index) {
+                FirebaseAnalytics.instance.logViewItem(
+                  items: <AnalyticsEventItem>[
+                    AnalyticsEventItem(itemCategory: _newsItems!.elementAt(index).categories!.first.value)
+                  ]
+                );
                 final item = _newsItems![index];
                 return NewsItem(item: item);
               },
